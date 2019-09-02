@@ -72,6 +72,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.scanbtn:
                 Intent intent = new Intent(MainActivity.this, ScanActivity.class);
                 startActivityForResult(intent, REQUEST_CODE);
+
+                startActivityForResult(new Intent(getApplicationContext(), ScanActivity.class),999);
+
                 break;
         }
     }
@@ -90,6 +93,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 });
             }
         }
+
+        if (requestCode == 999 && resultCode == RESULT_OK) {
+            result.setText(data.getStringExtra("message"));
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
+
     }
 
 

@@ -161,6 +161,9 @@ public class ScanActivity extends AppCompatActivity implements View.OnClickListe
                         .build();
         if(!detector.isOperational()){
             content.setText("Could not set up the detector!");
+            Intent i = new Intent();
+            i.putExtra("message",content.getText().toString());
+            this.finish();
             return;
         }
 
@@ -170,9 +173,15 @@ public class ScanActivity extends AppCompatActivity implements View.OnClickListe
         try {
             Barcode thisCode = barcodes.valueAt(0);
             content.setText(thisCode.rawValue);
+            Intent i = new Intent();
+            i.putExtra("message",content.getText().toString());
+            this.finish();
         } catch (Exception e) {
             e.printStackTrace();
             content.setText("Format Salah!");
+            Intent i = new Intent();
+            i.putExtra("message",content.getText().toString());
+            this.finish();
         }
 
 
