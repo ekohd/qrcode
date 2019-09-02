@@ -13,7 +13,6 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,9 +35,8 @@ public class ScanActivity extends AppCompatActivity implements View.OnClickListe
     CameraSource cameraSource;
     SurfaceHolder holder;
 
-    private Button buttonPicture;
     private String pathImage;
-    private TextView content;
+    private TextView choose_fileqr, content;
     public static final int REQUEST_CODE = 100;
     public static final int PERMISSION_REQUEST = 200;
 
@@ -105,8 +103,8 @@ public class ScanActivity extends AppCompatActivity implements View.OnClickListe
         });
 
 
-        buttonPicture = (Button) findViewById(R.id.buttonPicture);
-        buttonPicture.setOnClickListener(this);
+        choose_fileqr = (TextView) findViewById(R.id.tv_choosefileqr);
+        choose_fileqr.setOnClickListener(this);
         content = (TextView) findViewById(R.id.content);
 
     }
