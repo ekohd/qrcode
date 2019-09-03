@@ -6,6 +6,8 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -32,6 +34,7 @@ public class Main extends AppCompatActivity implements View.OnClickListener, Eas
     private Button file_button;
     private ImageView image_camera;
     private TextView tv_result;
+    private CoordinatorLayout coordinatorLayout;
 
     private String pathImage;
 
@@ -47,6 +50,7 @@ public class Main extends AppCompatActivity implements View.OnClickListener, Eas
         file_button = (Button) findViewById(R.id.btn_file);
         image_camera = (ImageView) findViewById(R.id.image_camera);
         tv_result = (TextView) findViewById(R.id.tv_result);
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatLayout);
 
         file_button.setOnClickListener(this);
         image_camera.setOnClickListener(this);
@@ -83,6 +87,16 @@ public class Main extends AppCompatActivity implements View.OnClickListener, Eas
                     @Override
                     public void run() {
                         tv_result.setText(barcode.displayValue);
+                        Snackbar snackbar = Snackbar
+                                .make(coordinatorLayout, "Berhasil!", Snackbar.LENGTH_INDEFINITE)
+                                .setAction("OKE", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+
+                                    }
+                                });
+
+                        snackbar.show();
                     }
                 });
             }
@@ -108,9 +122,6 @@ public class Main extends AppCompatActivity implements View.OnClickListener, Eas
                 .diskCacheStrategy(DiskCacheStrategy.ALL);
 
         pathImage = imageFile.getAbsolutePath();
-
-        System.out.println("Gallery img => " + imageFile.getAbsolutePath());
-
         scanQR(pathImage);
     }
 
@@ -138,9 +149,29 @@ public class Main extends AppCompatActivity implements View.OnClickListener, Eas
         try {
             Barcode thisCode = barcodes.valueAt(0);
             tv_result.setText(thisCode.rawValue);
+
+            Snackbar snackbar = Snackbar
+                    .make(coordinatorLayout, "Berhasil!", Snackbar.LENGTH_INDEFINITE)
+                    .setAction("OKE", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                        }
+                    });
+
+            snackbar.show();
         } catch (Exception e) {
             e.printStackTrace();
             tv_result.setText("Format Salah!");
+            Snackbar snackbar = Snackbar
+                    .make(coordinatorLayout, "Kesalahan saat membaca QRCode", Snackbar.LENGTH_INDEFINITE)
+                    .setAction("OKE", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                        }
+                    });;
+            snackbar.show();
         }
 
     }
