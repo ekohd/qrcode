@@ -162,8 +162,9 @@ public class ScanActivity extends AppCompatActivity implements View.OnClickListe
         if(!detector.isOperational()){
             content.setText("Could not set up the detector!");
             Intent i = new Intent();
-            i.putExtra("message",content.getText().toString());
-            this.finish();
+            i.putExtra("message", content.getText().toString());
+            setResult(RESULT_OK, i);
+            finish();
             return;
         }
 
@@ -173,19 +174,70 @@ public class ScanActivity extends AppCompatActivity implements View.OnClickListe
         try {
             Barcode thisCode = barcodes.valueAt(0);
             content.setText(thisCode.rawValue);
-            Intent i = new Intent();
-            i.putExtra("message",content.getText().toString());
-            this.finish();
+
+           if (barcodes.size() > 0) {
+               Intent i = new Intent();
+               i.putExtra("message",  barcodes.valueAt(0));
+               setResult(RESULT_OK, i);
+               finish();
+           }
         } catch (Exception e) {
             e.printStackTrace();
             content.setText("Format Salah!");
             Intent i = new Intent();
             i.putExtra("message",content.getText().toString());
-            this.finish();
+            setResult(RESULT_OK, i);
+            finish();
         }
 
 
     }
 
 
+    //private void scanQR(String pathImage) {
+    //        BitmapFactory.Options bOptions = new BitmapFactory.Options();
+    //        Bitmap bitmap = BitmapFactory.decodeFile(pathImage, bOptions);
+    //        //imageview.setImageBitmap(bitmap);
+    //
+    //        BarcodeDetector detector = new BarcodeDetector.Builder(this)
+    //                .setBarcodeFormats(Barcode.DATA_MATRIX | Barcode.QR_CODE)
+    //                .build();
+    //        if(!detector.isOperational()){
+    //            content.setText("Could not set up the detector!");
+    //            Intent i = new Intent();
+    //            i.putExtra("message",content.getText().toString());
+    //            finish();
+    //            return;
+    //        }
+    //
+    //        Frame frame = new Frame.Builder().setBitmap(bitmap).build();
+    //        SparseArray<Barcode> barcodes = detector.detect(frame);
+    //
+    //        try {
+    //            Barcode thisCode = barcodes.valueAt(0);
+    //            content.setText(thisCode.rawValue);
+    //
+    //            showDialog("Berhasil Scan QR!");
+    //        } catch (Exception e) {
+    //            e.printStackTrace();
+    //            content.setText("Format Salah!");
+    //            showDialog("Kesalahan Scan QR");
+    //        }
+    //    }
+    //
+    //    public void showDialog(String msg) {
+    //        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    //        builder.setTitle("Presensi QR From File")
+    //                .setMessage(msg)
+    //                .setCancelable(false)
+    //                .setNegativeButton("OKE", new DialogInterface.OnClickListener() {
+    //                    @Override
+    //                    public void onClick(DialogInterface dialog, int which) {
+    //                        dialog.dismiss();
+    //                        finish();
+    //                    }
+    //                });
+    //        AlertDialog dialog = builder.create();
+    //        dialog.show();
+    //    }
 }

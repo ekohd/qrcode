@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button scanbtn;
     TextView result;
     public static final int REQUEST_CODE = 100;
+    public static final int REQUEST_CODE_FILE = 999;
     public static final int PERMISSION_REQUEST = 200;
 
     @Override
@@ -63,19 +64,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        int id = v.getId();
 
-        switch (id) {
-            case R.id.imageView:
-                EasyImage.openGallery(MainActivity.this, 0);
-                break;
-            case R.id.scanbtn:
-                Intent intent = new Intent(MainActivity.this, ScanActivity.class);
-                startActivityForResult(intent, REQUEST_CODE);
 
-                startActivityForResult(new Intent(getApplicationContext(), ScanActivity.class),999);
-
-                break;
+        if (100 == REQUEST_CODE) {
+            startActivityForResult(new Intent(MainActivity.this, ScanActivity.class), REQUEST_CODE);
+        } else if (999 == REQUEST_CODE_FILE) {
+            startActivityForResult( new Intent(MainActivity.this, ScanActivity.class), REQUEST_CODE_FILE);
         }
     }
 
@@ -94,73 +88,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
 
-        if (requestCode == 999 && resultCode == RESULT_OK) {
-            result.setText(data.getStringExtra("message"));
+        if (requestCode == REQUEST_CODE_FILE && resultCode == RESULT_OK) {
+            if (data != null) {
+                final Barcode barcode = data.getParcelableExtra("message");
+                result.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        result.setText(barcode.displayValue);
+                    }
+                });
+            }
         }
 
         super.onActivityResult(requestCode, resultCode, data);
-
     }
-
-
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//        EasyImage.handleActivityResult(requestCode, resultCode, data, this, this);
-//    }
-//
-//    @Override
-//    public void onImagePickerError(Exception e, EasyImage.ImageSource source, int type) {
-//
-//    }
-//
-//    @Override
-//    public void onImagePicked(File imageFile, EasyImage.ImageSource source, int type) {
-//        Glide.with(MainActivity.this)
-//                .load(imageFile)
-//                .diskCacheStrategy(DiskCacheStrategy.ALL);
-//
-//        pathImage = imageFile.getAbsolutePath();
-//
-//        System.out.println("Gallery img => " + imageFile.getAbsolutePath());
-//
-//        if (pathImage.isEmpty()) {
-//
-//        }
-//
-//        scanQR(pathImage);
-//    }
-//
-//    @Override
-//    public void onCanceled(EasyImage.ImageSource source, int type) {
-//
-//    }
-//
-//    private void scanQR(String pathImage) {
-//        BitmapFactory.Options bOptions = new BitmapFactory.Options();
-//        Bitmap bitmap = BitmapFactory.decodeFile(pathImage, bOptions);
-//        //imageview.setImageBitmap(bitmap);
-//
-//        BarcodeDetector detector = new BarcodeDetector.Builder(getApplicationContext())
-//                        .setBarcodeFormats(Barcode.DATA_MATRIX | Barcode.QR_CODE)
-//                        .build();
-//        if(!detector.isOperational()){
-//            content.setText("Could not set up the detector!");
-//            return;
-//        }
-//
-//        Frame frame = new Frame.Builder().setBitmap(bitmap).build();
-//        SparseArray<Barcode> barcodes = detector.detect(frame);
-//
-//        try {
-//            Barcode thisCode = barcodes.valueAt(0);
-//            content.setText(thisCode.rawValue);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            content.setText("Format Salah!");
-//        }
-//
-//
-//    }
 }
